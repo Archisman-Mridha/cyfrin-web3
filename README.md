@@ -14,7 +14,7 @@ Learning web3 using this amazing video from Freecodecamp - https://youtu.be/gyMw
 
     > The combination of onchain decentralized logic and offchain oracles gives rise to `hybrid smart contracts`.
 
-+ *`EIP and ERC`* - EIP stands for **Ethereum Improvement Protocol** and represents a proposal which can enhance the behaviour of the Ethereum blockchain. Once an EIP gets enough attention, it is standardized by creating an ERC. ERC stands for *`Ethereum Request for Comments`*. One such ERC is **ERC-20**. ERC-20 speaks about how tokens should be created using smart contracts.
++ *`EIP and ERC`* - EIP stands for **Ethereum Improvement Protocol** and represents a proposal which can enhance the behaviour of the Ethereum blockchain. Once an EIP gets enough attention, it is standardized by creating an ERC. ERC stands for *`Ethereum Request for Comments`*. One such ERC is **ERC-20**. ERC-20 speaks about how tokens should be created using smart contracts. You can read more about ERC20 here - https://ethereum.org/en/developers/docs/standards/tokens/erc-20/.
 
 ## Tutorials
 
