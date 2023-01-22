@@ -20,12 +20,29 @@ Learning web3 using this amazing video from Freecodecamp - https://youtu.be/gyMw
     > The only difference from traditional systems is that, nobody touches our money.
     You can learn more about how decentralized financial products work and become a *`Quantitave DeFi Engineer`* 😊.
 
++ *`DAO(Decentralized Autonomous Organization)`* - DAO represents a group that is governed by a set of rules represented by a smart contract. Example of DAO - *[`Compound`](https://compound.finance/)* which is a DeFi platform. Now if the Compound maintainers want to do any kind of change to the platform, they need to create a *`proposal`* here - https://compound.finance/governance. Here is one such proposal - https://compound.finance/governance/proposals/141. The proposal creator **needs to perform a transaction** to create that proposal. After the proposal is created, it becomes active after some time and the platform users can then start voting for or against the proposal. After some time, based on the voting result, the proposal is **failed** or is **succeded and is queued for execution**. If the proposal is queued, it is then implemented.
+    > Sometimes along with the voting system, a discussion hub is also present.
+
+    The architecture of voting mechanism is crucial. There can be 2 types of voting mechanism :
+
+    - **Onchain voting** - The voter needs to call a vote function from a smart contract and send a signed transaction. But in case of onchain voting, the cost of the process becomes soo high because of the gas consumed during sending the signed transactions. To solve this problem, there is a method called *`Governer C`*.
+
+    - **Offchain voting** - In this case, we sign the transaction, but we dont send it to the blockchain. Instead we **store the signed transactions in a decentralized database like IPFS**. Then we count the votes and deliver the result to the blockchain using a decentralized system of oracles. So throughout the voting process, the number of transactions sent to the blockchain is just 1. This mechanism saves lots of gas and also gives a more efficient way to store the voting transactions.
+
+    The voting mechanism can also be broken down to subtypes from different perspectives.
+
+    Tools we can use to build DAOs - *[`Snapshot`](https://snapshot.org/#/)*.
+
 ## Tutorials
 
 + Creating our own ERC20 token using hardhat - *./erc20*.
     > However, generally we won't write all the implementations for an NFT. Rather, we will extend an existing NFT. For example, we can extend the ERC20 standardized token from **OpenZeppelin** - https://docs.openzeppelin.com/contracts/4.x/erc20, to create our own NFT. This token, contains the base implementations.
 
 + Playing around with Aave - *./aave*.
+
++ Creating an NFT marketplace - *./nft-marketplace*.
+
++ Creating a DAO - *./dao*.
 
 ## How the blockchain works
 
