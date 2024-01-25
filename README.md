@@ -1,7 +1,3 @@
-# Learning Web3
-
-Learning web3 using this amazing video from Freecodecamp - https://youtu.be/gyMwXuJrbJQ.
-
 ## Concepts
 
 + `Blockchain` - Bitcoin was one of the first protocols to use this revolutionary technologies called Blockchain. The Bitcoin white paper written by Satoshi Nakamoto, outlined how Bitcoin can make peer-to-peer transactions in a decentralized network. This network was powered by cryptography and decentrality. People were able to make transactions without any censorchip or control from a central authority. Due to its features, people started using it as a superior digital store of value (a better store of value over something like Gold). Thats'y people also refer to Bitcoin as Digital Gold. Similar to Gold, there is a limited amount of Bitcoin available on the planet.
@@ -92,16 +88,32 @@ There are 2 kinds of sybil resistence mechanisms - the `proof of work` and the `
 - `Proof of Stake` algorithm (lot more environment friendly) - Ethereum 2 has migrated to the proof of stake algorithm. Here, nodes are called `validators` and not miners. Validators are randomly chosen to create new blocks and validate transactions based on the amount of cryptocurrency they hold and are willing to `stake` as collateral. The idea is that participants with a higher stake in the cryptocurrency have a greater interest in maintaining the integrity of the network, as they have more to lose if they act maliciously.
     > The PoS algorithm is much more environment friendly, since instead of all nodes competing to find the nonce value of a transaction, only 1 node does it. Other nodes just validate the transaction.
 
+## Stablecoins
+
+> A stablecoin is a **non volatile crypto asset** (whose buying power fluctuates very little relative to the rest of the market).
+
+Consider we went to an apple market 1 year ago and bought *x* amount of apples in exchange of 1 Bitcoin (this is called `buying power`). Today, if we try to do the some, we can get way more number of apples using 1 Bitcoin (let's say *y* amount). But instead of Bitcoin, if we used USD, those numbers would more or less be the same (*x = y*). Thus USD is a much more `stable currency` compared to Bitcoin.
+
+Most cryptocurrencies by nature are not stable. In our everyday life, we need some sort of stable currency to fulfill the 3 functions of money - `storage of value`, `unit of account` (a way to measure how valuable something is) and `medium of exchange`. In web3, stablecoins play the role of stable currencies.
+
+Factors categorizing stablecoins -
+
++ `Relative stability` - These stablecoins are stable relative to only something else. The most common type of stablecoins are `pegged / anchored` stablecoins like Tether, Dai, USDC (stable relative to USD) etc. We also have `floating` stablecoins - they are not pegged to anything but their buying power stays the same (neutral to inflation unlike anchored stablecoins) (like Rai).
+
++ `Stability method` (`governed` or `algorithmic`)
+
++ `Collateral type` (`exogenous` or `endogenous`)
+
 ## Tutorials
 
 + Creating our own ERC20 token using hardhat - *./erc20*.
     > However, generally we won't write all the implementations for an NFT. Rather, we will extend an existing NFT. For example, we can extend the ERC20 standardized token from **OpenZeppelin** - https://docs.openzeppelin.com/contracts/4.x/erc20, to create our own NFT. This token, contains the base implementations.
 
-+ Playing around with Aave - *./aave*.
-
 + Creating an NFT marketplace - *./nft-marketplace*.
 
 + Creating a DAO - *./dao*.
+
++ Creating a Stablecoin - *./stablecoin*.
 
 ## TODO
 
