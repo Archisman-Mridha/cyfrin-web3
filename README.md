@@ -120,8 +120,7 @@ Factors categorizing stablecoins -
 
 ## Tutorials
 
-+ Creating our own ERC20 token using hardhat - *./erc20*.
-    > However, generally we won't write all the implementations for an NFT. Rather, we will extend an existing NFT. For example, we can extend the ERC20 standardized token from **OpenZeppelin** - https://docs.openzeppelin.com/contracts/4.x/erc20, to create our own NFT. This token, contains the base implementations.
++ Creating our own [ERC20 token](./erc20).
 
 + Creating an [NFT marketplace](./nft-marketplace).
 
