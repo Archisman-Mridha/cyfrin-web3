@@ -7,3 +7,12 @@
 [submodule "stablecoin/lib/chainlink-brownie-contracts"]
 	path = stablecoin/lib/chainlink-brownie-contracts
 	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
+[submodule "nft-marketplace/lib/forge-std"]
+	path = nft-marketplace/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "nft-marketplace/lib/openzeppelin-contracts"]
+	path = nft-marketplace/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "nft-marketplace/lib/foundry-devops"]
+	path = nft-marketplace/lib/foundry-devops
+	url = https://github.com/Cyfrin/foundry-devops

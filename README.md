@@ -31,6 +31,20 @@
 
     Tools we can use to build DAOs - [`Snapshot`](https://snapshot.org/#/).
 
++ `NFTS (Non Fungible Tokens)` - NFTs (also known as `ERC721s`) are a token standard created on the Ethereum platform. **They are unique and not interchangeable (unlike USD or Eth)**. Currently, they are mostly represented as digital pieces of art that have a permanent history of who has deployed and owned them.
+
+    NFTs are deployed to smart contract platforms and then can be viewed and traded in NFT platforms / marketplaces like `Opensea` (note - they can also be viewed and traded without the help of these NFT marketplaces).
+
++ `IPFS (Inter Planatery File System)` - IPFS is `a distributed decentralized data storage system`, that is not exactly a blockhain system but is similar to a blockchain system.
+
+    Our IPFS node hashes our data to get a unique hash. The hash is then linked to the data. Every IPFS node in the planet has the same hashing function. The IPFS node then hosts the data mapped to the unique hash.
+
+    Our IPFS node is connected to a massive network of other IPFS nodes. The hash and the data gets replicated to some of those other IPFS nodes.
+
+    An IPFS node is very lightweight compared to a blockchain node, since it supports only data storage and not any smart contract execution. Each IPFS node can choose which data it will replicate. So an IPFS node can be of size few MBs to several TBs or more.
+
+    Now what if, no other IPFS node has replicated the data hosted in our IPFS node? We can use [Pinata cloud](https://www.pinata.cloud) - a service which will replicate our host our data, so that it remains available, even when our IPFS node goes down.
+
 ## How the blockchain works
 
 The fundamental unit of the blockchain is a block. This is a structure of a block -
@@ -69,7 +83,7 @@ For every transaction
 
 - A **unique id** called `transaction hash` will be generated using the private key of a keypair (generated using an Elliptic Curve Digital Signature Algorithm). Anyone can verify the transaction signature, using the public key of the keypair.
     > The private key is generated using your Metamask passphrase and Metamask account number combined. Part of it is your Metamask account address. The public key is then derived from the private key.
-- You need pay a `transaction fee` - Whenever you perform a transaction, the node validating that transaction (called `validator` / `miner`) gets paid with a little amount of the transaction amount as compensation.
+- You need to pay a `transaction fee` - Whenever you perform a transaction, the node validating that transaction (called `validator` / `miner`) gets paid with a little portion of the transaction fee as compensation.
   > Gas is a unit of computational measurement. The more complex the transaction is, the more gas is required. **transaction fee = gas used . current gas price**. The current gas price is proportional to how many transactions are currently being performed in the blockchain.
 
   Currently in Ethereum, according to EIP 1559, for every transaction, you need to mention a `base fee`. It is the minimum gas price you need to set, to execute the transaction. The base fee is measured in `Gwei` (1 billion gwei = 1 ether). We also need to mention a `max fee` and `max priority fee` (max gas fee + maximum tip we are willing to pay to the miners). Currently in Ethereum, **the base fee ends up getting burned** (removed from circulation forever). The base fee is proportional to how many transactions are currently being performed in the blockchain. So the amount of economic compensation a miner gets for verifying the transaction = **transaction fee - base fee**.
@@ -109,14 +123,14 @@ Factors categorizing stablecoins -
 + Creating our own ERC20 token using hardhat - *./erc20*.
     > However, generally we won't write all the implementations for an NFT. Rather, we will extend an existing NFT. For example, we can extend the ERC20 standardized token from **OpenZeppelin** - https://docs.openzeppelin.com/contracts/4.x/erc20, to create our own NFT. This token, contains the base implementations.
 
-+ Creating an NFT marketplace - *./nft-marketplace*.
++ Creating an [NFT marketplace](./nft-marketplace).
 
 + Creating a DAO - *./dao*.
 
-+ Creating a Stablecoin - *./stablecoin*.
++ Creating a [Stablecoin](./stablecoin).
 
 ## TODO
 
 - [ ] Read about the Robinhood scam and how it could be prevented using Blockchains.
 - [ ] What are `Decentralized Exchanges` (like `Uniswap`)?
-- [ ] What are `Layer 2 Blockchains` (like Arbitrum, Optimism etc.)? Arbitrum and Optimism and also called `Rollups`. How do they work?
+- [ ] What are `Layer 2 Blockchains` (like Arbitrum, Optimism etc.)? Arbitrum and Optimism are also called `Rollups`. How do they work?
