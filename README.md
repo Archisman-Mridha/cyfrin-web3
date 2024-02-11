@@ -106,17 +106,20 @@ There are 2 kinds of sybil resistence mechanisms - the `proof of work` and the `
 
 > A stablecoin is a **non volatile crypto asset** (whose buying power fluctuates very little relative to the rest of the market).
 
-Consider we went to an apple market 1 year ago and bought *x* amount of apples in exchange of 1 Bitcoin (this is called `buying power`). Today, if we try to do the some, we can get way more number of apples using 1 Bitcoin (let's say *y* amount). But instead of Bitcoin, if we used USD, those numbers would more or less be the same (*x = y*). Thus USD is a much more `stable currency` compared to Bitcoin.
+Consider we went to an apple market 1 year ago and bought *x* amount of apples in exchange of 1 Bitcoin (this is called `buying power`). Today, if we try to do the same, we can get way more number of apples using 1 Bitcoin (let's say *y* amount). But instead of Bitcoin, if we used USD, those numbers would more or less be the same (*x = y*). Thus USD is a much more `stable currency` compared to Bitcoin.
 
 Most cryptocurrencies by nature are not stable. In our everyday life, we need some sort of stable currency to fulfill the 3 functions of money - `storage of value`, `unit of account` (a way to measure how valuable something is) and `medium of exchange`. In web3, stablecoins play the role of stable currencies.
 
-Factors categorizing stablecoins -
-
 + `Relative stability` - These stablecoins are stable relative to only something else. The most common type of stablecoins are `pegged / anchored` stablecoins like Tether, Dai, USDC (stable relative to USD) etc. We also have `floating` stablecoins - they are not pegged to anything but their buying power stays the same (neutral to inflation unlike anchored stablecoins) (like Rai).
 
-+ `Stability method` (`governed` or `algorithmic`)
++ `Stability method` (`governed` or `algorithmic`) - The stability method is the mechanism that makes the stablecoin stable. It refers to who / what is doing the minting and burning.
+    If there is a centralized authority doing the minting and burning, then the stablecoin is governed (like USDC and TUSD). Governed stablecoins are considered centralized. If the minting and burning is done by some autonomous code and there is 0 human intervention, then the stablecoin (like Dai and Rai) is considered algorithmic.
 
-+ `Collateral type` (`exogenous` or `endogenous`)
++ `Collateral type` (`exogenous` or `endogenous`) - The stuff backing our stablecoin and giving it value (like USDC is backed by USD), is called collateral. Exogenous collateral is collateral that originates from outside the protocol, whereas endogenous collateral originates from inside the protocol.
+
+  > If the stablecoin fails, then does the underlying collateral also fail? If yes, then the collateral is endogenous (Like Luna / Terra fails if UST fails), otherwise it's exogenous (Like USD won't fail if USDC fails).
+
+  You may ask, why does the concept of endogenous collateral even exis? Reason - capital efficiency. If I want to mint 60B USDCs, I need to onboard 60B USD as collateral. That's a lot of money! In case of endogenously collateralized stablecoins, we need to onboard 0 USD!
 
 ## Tutorials
 
