@@ -8,4 +8,11 @@ remappings = [
     "@chainlink/contracts=lib/chainlink-brownie-contracts/contracts"
 ]
 
+[invariant]
+runs = 128
+depth = 128
+# NOTE - The Foundry team is working on this feature - for some tests fail_and_revert can
+# be true, and for others it can be false.
+fail_on_revert = false
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
