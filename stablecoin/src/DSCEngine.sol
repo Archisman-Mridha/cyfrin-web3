@@ -33,25 +33,13 @@ import { AggregatorV3Interface } from "@chainlink/contracts/src/v0.8/interfaces/
     So, Archi made a profit of 5 USD. And Adam got his punishment (lost 5 USD) for making the system
     uncollateralized. This process is called liquidation.
 */
+//
+// NOTE - collateral token amount will always be in wei unit.
+//
+// NOTE - ChainLink returns the current price of 1e8 wei unit of tokens.
+//
+// NOTE - 1 USD = 1 ether unit (or 1e18 wei unit) of DSC.
 contract DSCEngine is ReentrancyGuard {
-
-    constructor(
-        address[] memory collateralTokenAddresses,
-        address[] memory priceFeedAddresses,
-        address dscAddress
-    ) {
-        if(collateralTokenAddresses.length != priceFeedAddresses.length)
-            revert DSCEngine__CollateralTokenAddressesAndPriceFeedAddressesMustHaveSameLength( );
-
-        for(uint256 i= 0; i< collateralTokenAddresses.length; i++) {
-            address collateralToken= collateralTokenAddresses[i];
-
-            priceFeeds[collateralToken]= priceFeedAddresses[i];
-            collateralTokens.push(collateralToken);
-        }
-
-        dsc= DecentralizedStableCoin(dscAddress);
-    }
 
     // -- STATE VARIABLES --
 
@@ -71,6 +59,38 @@ contract DSCEngine is ReentrancyGuard {
     mapping(address collateralToken => address valueInUSDs) private priceFeeds;
     mapping(address user => mapping(address collateralToken => uint256 collateralAmount)) private collateralDeposits;
     mapping(address user => uint256 dscMinted) private mints;
+
+    // -- ERRORS --
+    error DSCEngine__AmountMustBeMoreThanZero( );
+    error DSCEngine__CollateralTokenNotAllowed( );
+    error DSCEngine__CollateralTransferFailed( );
+    error DSCEngine__CollateralTokenAddressesAndPriceFeedAddressesMustHaveSameLength( );
+    error DSCEngine__LessThanMinHealthFactor(uint256 healthFactor);
+    error DSCEngine__DSCTransferFailed( );
+    error DSCEngine__HealthFactorOfUserIsMoreThanMinHealthFactor( );
+    error DSCEngine__HealthFactorOfInsolventUserNotImproved( );
+
+    // -- EVENTS --
+    event CollateralDeposited(address indexed user, address indexed collateralToken, uint256 indexed collateralAmount);
+    event CollateralRedeemed(address indexed redeemedFrom, address indexed redeemedTo, address indexed collateralToken, uint256 collateralAmount);
+
+    constructor(
+        address[] memory collateralTokenAddresses,
+        address[] memory priceFeedAddresses,
+        address dscAddress
+    ) {
+        if(collateralTokenAddresses.length != priceFeedAddresses.length)
+            revert DSCEngine__CollateralTokenAddressesAndPriceFeedAddressesMustHaveSameLength( );
+
+        for(uint256 i= 0; i< collateralTokenAddresses.length; i++) {
+            address collateralToken= collateralTokenAddresses[i];
+
+            priceFeeds[collateralToken]= priceFeedAddresses[i];
+            collateralTokens.push(collateralToken);
+        }
+
+        dsc= DecentralizedStableCoin(dscAddress);
+    }
 
     // -- EXTERNAL FUNCTIONS --
 
@@ -209,21 +229,28 @@ contract DSCEngine is ReentrancyGuard {
         _revertIfHealthFactorIsBroken(msg.sender);
     }
 
-    // Get the amount of a collateral token worth given amount of USD.
-    function getCollateralTokenAmountWorthUSD(address collateralToken, uint256 usdAmount) public view returns(uint256) {
-        AggregatorV3Interface priceFeed= AggregatorV3Interface(priceFeeds[collateralToken]);
-        (, int256 currentCollateralTokenPrice,,,)= priceFeed.latestRoundData( );
-
-        return (usdAmount * 1e18) / (uint256(currentCollateralTokenPrice) * 1e10);
-    }
-
-    function getDepositedCollateralValueInUSD(address user) public view returns(uint256 depositedCollateralValueInUSD) {
+    function getDepositedCollateralValueInUSDForUser(address user) public view returns(uint256 depositedCollateralValueInUSD) {
         for(uint256 i= 0; i < collateralTokens.length; i++) {
             address collateralToken= collateralTokens[i];
 
             uint256 collateralAmount= collateralDeposits[user][collateralToken];
             depositedCollateralValueInUSD += getCollateralValueInUSD(collateralToken, collateralAmount);
         }
+    }
+
+    function getCollateralValueInUSD(address collateralToken, uint256 amount) public view returns(uint256) {
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(priceFeeds[collateralToken]);
+        (, int256 currentCollateralTokenPrice,,,)= priceFeed.latestRoundData( );
+
+        return ((uint256(currentCollateralTokenPrice) * 1e10) * amount) / 1e18;
+    }
+
+    // Get the amount of a collateral token worth given amount of USD.
+    function getCollateralTokenAmountWorthUSD(address collateralToken, uint256 usdAmount) public view returns(uint256) {
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(priceFeeds[collateralToken]);
+        (, int256 currentCollateralTokenPrice,,,)= priceFeed.latestRoundData( );
+
+        return (usdAmount * 1e18) / (uint256(currentCollateralTokenPrice) * 1e10);
     }
 
     // -- INTERNAL FUNCTIONS --
@@ -237,7 +264,7 @@ contract DSCEngine is ReentrancyGuard {
     // Returns how close to liquidation a user is.
     // If the health factor of a user is less than 1, he / she gets liquified.
     function _healthFactor(address user) private view returns(uint256) {
-        (uint256 totalDSCMinted, uint256 depositedCollateralValueInUSD)= getUserInformation(user);
+        (uint256 totalDSCMinted, uint256 depositedCollateralValueInUSD)= _getUserInformation(user);
 
         /*
             If 100 USD worth of DSC is minted, 100 * 2 = 200 USD worth of collateral must be present.
@@ -256,16 +283,9 @@ contract DSCEngine is ReentrancyGuard {
         return collateralAdjustedForThreshold / totalDSCMinted; // --- (2)
     }
 
-    function getUserInformation(address user) private view returns(uint256 totalDSCMinted, uint256 depositedCollateralValueInUSD) {
-        totalDSCMinted= mints[user];
-        depositedCollateralValueInUSD= getDepositedCollateralValueInUSD(user);
-    }
-
-    function getCollateralValueInUSD(address collateralToken, uint256 amount) private view returns(uint256) {
-        AggregatorV3Interface priceFeed= AggregatorV3Interface(priceFeeds[collateralToken]);
-        (, int256 currentCollateralTokenPrice,,,)= priceFeed.latestRoundData( );
-
-        return ((uint256(currentCollateralTokenPrice) * 1e10) * amount) / 1e18;
+    function _getUserInformation(address user) private view returns(uint256 dscMinted, uint256 depositedCollateralValueInUSD) {
+        dscMinted= mints[user];
+        depositedCollateralValueInUSD= getDepositedCollateralValueInUSDForUser(user);
     }
 
     function _redeemCollateral(
@@ -311,17 +331,9 @@ contract DSCEngine is ReentrancyGuard {
         _;
     }
 
-    // -- ERRORS --
-    error DSCEngine__AmountMustBeMoreThanZero( );
-    error DSCEngine__CollateralTokenNotAllowed( );
-    error DSCEngine__CollateralTransferFailed( );
-    error DSCEngine__CollateralTokenAddressesAndPriceFeedAddressesMustHaveSameLength( );
-    error DSCEngine__LessThanMinHealthFactor(uint256 healthFactor);
-    error DSCEngine__DSCTransferFailed( );
-    error DSCEngine__HealthFactorOfUserIsMoreThanMinHealthFactor( );
-    error DSCEngine__HealthFactorOfInsolventUserNotImproved( );
+    // -- These are used only while testing --
 
-    // -- EVENTS --
-    event CollateralDeposited(address indexed user, address indexed collateralToken, uint256 indexed collateralAmount);
-    event CollateralRedeemed(address indexed redeemedFrom, address indexed redeemedTo, address indexed collateralToken, uint256 collateralAmount);
+    function getUserInformation(address user) public view returns(uint256 dscMinted, uint256 depositedCollateralValueInUSD) {
+        return _getUserInformation(user);
+    }
 }
